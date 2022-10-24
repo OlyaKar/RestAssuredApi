@@ -10,171 +10,191 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 
 public class TestCases {
+	
+	private final String GET_CALL_PATH = "https://www.wiley.com/en-us/search/autocomplete/comp_00001H9J?term=Java";
+	private final String HTTP_REQUEST_RESPONSE_PATH = "https://httpbin.org/delay/{delay}";
+	private final String GET_IMAGE_PATH = "https://httpbin.org/image/png";
+	private final String IMAGE_COMPARE_PATH = "src/test/java/com/demo/image.png";
+	
+	private final String LOCATION_OF_TERM = "suggestions.term";
+	private final String LOCATION_OF_TITLE = "pages.title";
+	
+	private final int EXPECTED_SUGGESTIONS = 4;
+	private final String EXPECTED_STRING_FORM = "<span class=\"search-highlight\">java</span>";
+	private final int EXPECTED_PAGES_COUNT = 4;
+	private final String EXPECTED_WILEY = "Wiley";
+	private final long EXPECTED_MAX_TIME = 10L; 
+	
+	private final int OK_STATUS_CODE = 200;
+	private final int SERVER_ERROR_STATUS_CODE = 500;
+	private final int BAD_GETWAY_STATUS_CODE = 502;
+	private final int NOT_FOUND_STATUS_CODE = 404;
+	
 	@Test
 	public void checkGetCallSuggestionsSize() {
 
-		TestHelper.checkSizeOfGETCall(API_Test_Objects.GET_CALL_PATH,"suggestions",API_Test_Objects.EXPECTED_SUGGESTIONS);
+		TestHelper.checkSizeOfGETCall(GET_CALL_PATH,"suggestions",EXPECTED_SUGGESTIONS);
 	}
 	
 	@Test
 	public void checkGetCallSuggestionsTermContainsString() {
 
-		TestHelper.checkGETCallContainsString(API_Test_Objects.GET_CALL_PATH,
-				API_Test_Objects.LOCATION_OF_TERM,
-				API_Test_Objects.EXPECTED_STRING_FORM);
+		TestHelper.checkGETCallContainsString(GET_CALL_PATH,
+				LOCATION_OF_TERM,
+				EXPECTED_STRING_FORM);
 	}
 	
 	@Test
 	public void checkGetCallPagesSize() {
 
-		TestHelper.checkSizeOfGETCall(API_Test_Objects.GET_CALL_PATH,"pages",API_Test_Objects.EXPECTED_PAGES_COUNT);
+		TestHelper.checkSizeOfGETCall(GET_CALL_PATH,"pages",EXPECTED_PAGES_COUNT);
 	}
 	
 	@Test
 	public void checkGetCallPagesTitleContainsWiley() {
 
-		TestHelper.checkGETCallContainsString(API_Test_Objects.GET_CALL_PATH,
-				API_Test_Objects.LOCATION_OF_TITLE,
-				API_Test_Objects.EXPECTED_WILEY);
+		TestHelper.checkGETCallContainsString(GET_CALL_PATH,
+				LOCATION_OF_TITLE,
+				EXPECTED_WILEY);
 	}
 
 	@Test
 	public void checkHttpRequestResponseServiceDelayInt() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"345",
-				API_Test_Objects.OK_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				OK_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayGreatMax() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"5177489647",
-				API_Test_Objects.OK_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				OK_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayLessMin() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"-4147453668",
-				API_Test_Objects.OK_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				OK_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberWspaces() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"  78  ",
-				API_Test_Objects.OK_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				OK_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberWdot() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"76.95",
-				API_Test_Objects.OK_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				OK_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberFloat() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"67.84f",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberLong() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"15000000000L",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberDouble() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"4556.54d",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 		
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNumberWcomma() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"98,768",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayEmpty() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"",
-				API_Test_Objects.NOT_FOUND_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				NOT_FOUND_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 
 	@Test
 	public void checkHttpRequestResponseServiceDelayNaN() {
 
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"NaN",
-				API_Test_Objects.BAD_GETWAY_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				BAD_GETWAY_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayString() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"somestring",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayChar() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"s",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayNull() {
 
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"null",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelayBoolean() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"true",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelaySpecials() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"<(&",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
 	public void checkHttpRequestResponseServiceDelaySpaces() {
-		TestHelper.httpRequestResponseService(API_Test_Objects.HTTP_REQUEST_RESPONSE_PATH,
+		TestHelper.httpRequestResponseService(HTTP_REQUEST_RESPONSE_PATH,
 				"     ",
-				API_Test_Objects.SERVER_ERROR_STATUS_CODE,
-				API_Test_Objects.EXPECTED_MAX_TIME);
+				SERVER_ERROR_STATUS_CODE,
+				EXPECTED_MAX_TIME);
 	}
 	
 	@Test
@@ -183,14 +203,14 @@ public class TestCases {
 		String imageActual;
 		
 		try {
-			imageActual = new String ( Files.readAllBytes(Paths.get(API_Test_Objects.IMAGE_COMPARE_PATH)) );
+			imageActual = new String ( Files.readAllBytes(Paths.get(IMAGE_COMPARE_PATH)) );
 			
 			given()
 			.when()
-	        	.get(API_Test_Objects.GET_IMAGE_PATH)
+	        	.get(GET_IMAGE_PATH)
 	        .then()
 		        .assertThat()
-		        .statusCode(API_Test_Objects.OK_STATUS_CODE)
+		        .statusCode(OK_STATUS_CODE)
 		       .and()
 		        .contentType("image/png")
 		       .and()
